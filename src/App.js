@@ -1316,6 +1316,7 @@ class StepMove extends React.Component {
       detailInfo =
       <>
         <Row wrap={false} style={{marginTop: 25,}}>
+          
           <Col span={3} offset={2}>
             <Card
               style={{
@@ -1323,7 +1324,7 @@ class StepMove extends React.Component {
                 // backgroundColor: 'gray',
                 // fontWeight: 'bold',
                 textAlign: 'center',
-                fontSize: 4,
+                fontSize: 14,
                 borderWidth: 'medium',
                 borderColor: 'black'
               }}
@@ -1343,7 +1344,7 @@ class StepMove extends React.Component {
                 // backgroundColor: 'gray',
                 // fontWeight: 'bold',
                 textAlign: 'center',
-                fontSize: 0.5,
+                fontSize: 8,
                 borderWidth: 'medium',
                 borderColor: 'black'
               }}
@@ -1418,6 +1419,7 @@ class StepMove extends React.Component {
         </Row>
 
         <Row wrap={false} style={{marginTop: 1,}}>
+          
           <Col span={10} offset={2}>
             <Card
               style={{
@@ -1480,6 +1482,7 @@ class StepMove extends React.Component {
         </Row>
 
         <Row wrap={false} style={{marginTop: 1,}}>
+          
           <Col span={5} offset={2}>
             <Card
               style={{
@@ -1539,6 +1542,7 @@ class StepMove extends React.Component {
               </div>
             </Card>
           </Col>
+        
         </Row>
 
         <Row wrap={false} style={{marginTop: 1,}}>
@@ -1598,7 +1602,7 @@ class StepMove extends React.Component {
                 // backgroundColor: 'gray',
                 // fontWeight: 'bold',
                 textAlign: 'center',
-                fontSize: 4,
+                fontSize: 8,
                 borderWidth: 'medium',
                 borderColor: 'black'
               }}
@@ -1618,7 +1622,7 @@ class StepMove extends React.Component {
                 // backgroundColor: 'gray',
                 // fontWeight: 'bold',
                 textAlign: 'center',
-                fontSize: 0.5,
+                fontSize: 8,
                 borderWidth: 'medium',
                 borderColor: 'black'
               }}
@@ -1638,7 +1642,7 @@ class StepMove extends React.Component {
                 // backgroundColor: 'gray',
                 // fontWeight: 'bold',
                 textAlign: 'center',
-                fontSize: 1,
+                fontSize: 8,
                 borderWidth: 'medium',
                 borderColor: 'black'
               }}
@@ -1678,7 +1682,7 @@ class StepMove extends React.Component {
                 // backgroundColor: 'gray',
                 // fontWeight: 'bold',
                 textAlign: 'center',
-                fontSize: 2,
+                fontSize: 14,
                 borderWidth: 'medium',
                 borderColor: 'black'
               }}

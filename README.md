@@ -17,6 +17,8 @@
     -   执行`npm install rc-animate --save`安装Ant-Motion动画库依赖（css样式动画）
 -   执行`yarn start`，即可在[本地3000端口]( [http://localhost:3000](http://localhost:3000/))查看！Enjoy it！
 
+另外也可通过直接访问10.60.102.252:20129来在线查看！
+
 ## 二、 程序设计总体说明
 
 ### 1. 总体目录结构
