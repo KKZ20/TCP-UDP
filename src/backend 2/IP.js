@@ -1,8 +1,9 @@
 /**
  * @author Henry Wong
- * see the end of the code for an example
+ * 包装IP头部
  */
 
+// IPv4首部各部分长度（位）
 // TODO: remove this and replace it with map below
 const IPv4HeaderLength = {
   version:               4,
@@ -21,6 +22,7 @@ const IPv4HeaderLength = {
   options:             320,
 };
 
+// 同上
 const IPv4HeaderLengthMap = new Map([
   ['Version',               4],
   ['IHL',                   4],
@@ -38,6 +40,7 @@ const IPv4HeaderLengthMap = new Map([
   ['Options',             320],
 ]);
 
+// 包装IPv4头部类
 class IPv4Packet {
   constructor(srcAddr) {
     this.packet = [];
@@ -45,6 +48,7 @@ class IPv4Packet {
     this.addr = srcAddr;
   }
 
+  // 包装头部，依次调用下列函数
   encapsulatePacket(srcAddr, dstAddr, data, msg = undefined, ttl = 128) {
     // let packet = '';
 
@@ -76,6 +80,7 @@ class IPv4Packet {
     return this.packet;
   }
 
+  // 解包
   decapsulatePacket(packet) {
     if (typeof packet !== 'string') {
       throw new Error('IPv4 packet must be a string!');
@@ -117,6 +122,7 @@ class IPv4Packet {
     return this.packet;
   }
 
+  // 二进制转十六进制
   getHex(binary) {
     let str = '';
 
@@ -134,6 +140,7 @@ class IPv4Packet {
     return '0x' + str.split('').reverse().join('');
   }
 
+  // ASCII字符转二进制
   parseData(binary) {
     let data = '';
 
@@ -144,6 +151,7 @@ class IPv4Packet {
     return data;
   }
 
+  // 设置版本
   setVersion(version = 4) {
     let packetVersion = {
       name: 'Version',
@@ -161,6 +169,7 @@ class IPv4Packet {
     return this;
   }
 
+  // 设置首部长度
   // Internet Header Length
   setIHL(length = 5) {
     let packetIHL = {
@@ -179,6 +188,7 @@ class IPv4Packet {
     return this;
   }
 
+  // 设置差分服务代码点
   // Differential Services Codepoint
   // see https://en.wikipedia.org/wiki/Differentiated_services#Configuration_guidelines
   setDSCP(diffServ = 0) {
@@ -198,6 +208,7 @@ class IPv4Packet {
     return this;
   }
 
+  // 设置显式拥塞通告
   // Explicit Congestion Notification
   setECN(hasECT = false) {
     let packetECN = {
@@ -219,6 +230,7 @@ class IPv4Packet {
     return this;
   }
 
+  // 设置总长度
   setTotalLength(payloadLength) {
     let packetTotalLength = {
       name: 'TotalLength',
@@ -237,6 +249,7 @@ class IPv4Packet {
     return this;
   }
 
+  // 设置标识
   // 用于分片
   setIdentification(id = 0) {
     let packetIdentification = {
@@ -255,6 +268,7 @@ class IPv4Packet {
     return this;
   }
 
+  // 设置标志
   setFlags(dontFragment = true, moreFragment = false) {
     let packetFlags = {
       name: 'Flags',
@@ -278,6 +292,7 @@ class IPv4Packet {
     return this;
   }
 
+  // 设置片偏移
   setFragmentOffset(offset = 0) {
     let packetFragmentOffset = {
       name: 'FragmentOffset',
@@ -295,6 +310,7 @@ class IPv4Packet {
     return this;
   }
 
+  // 设置生存时间
   setTimeToLive(ttl = 128) {
     let packetTimeToLive = {
       name: 'TimeToLive',
@@ -312,6 +328,7 @@ class IPv4Packet {
     return this;
   }
 
+  // 设置协议
   // IP: 4, TCP: 6, UDP: 17
   // see http://www.iana.org/assignments/protocol-numbers
   setProtocol(protocol = 6) {
@@ -331,6 +348,7 @@ class IPv4Packet {
     return this;
   }
 
+  // 设置首部校验和
   setHeaderChecksum() {
     let packetHeaderChecksum = {
       name: 'HeaderChecksum',
@@ -348,6 +366,7 @@ class IPv4Packet {
     return this;
   }
 
+  // 设置源IP地址
   setSourceIPAddress(addr) {
     let packetSourceIPAddress = {
       name: 'SourceIPAddress',
@@ -368,6 +387,7 @@ class IPv4Packet {
     return this;
   }
 
+  // 设置目标IP地址
   setDestinationIPAddress(addr) {
     let packetDestinationIPAddress = {
       name: 'DestinationIPAddress',
@@ -388,17 +408,20 @@ class IPv4Packet {
     return this;
   }
 
+  // 设置可选字段
   // see https://en.wikipedia.org/wiki/IPv4#Options
   setOptions() {
     console.log('Don\'t support IPv4 header options!');
     return this;
   }
 
+  // 设置可选字段填充字节
   // when options apply, pad 0 to make header a 32-bit multiple
   setPadding(hasOptions = false) {
     return this;
   }
 
+  // 设置数据（载荷）
   setData(data, msg) {
     let packetData = {
       name: 'Data',
@@ -415,6 +438,7 @@ class IPv4Packet {
     return this;
   }
 
+  // 计算首部检验和
   calculateChecksum() {
     let arr = [];
     let str = '';
@@ -446,6 +470,7 @@ class IPv4Packet {
     return this;
   }
 
+  // 检查IP地址有效性
   checkIPAddress() {
     let str = '';
     let srcAddrArray = [], dstAddrArray = [];
@@ -481,6 +506,7 @@ class IPv4Packet {
     return this;
   }
 
+  // 检查校验和正确性
   checkChecksum() {
     let str = '';
     let sum = 0;

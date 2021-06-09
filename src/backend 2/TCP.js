@@ -1,6 +1,6 @@
 /**
  * @author Henry Wong
- * see the end of the code for an example
+ * 封装TCP首部
  */
 
 /**
@@ -8,6 +8,7 @@
  * The unit of length is bit
  * Every part of TCP header is presented in order
  */
+// TCP首部各部分内容长度（位）
 const TCPHeaderLengthMap = new Map([
   ['SourcePort',            16],
   ['DestinationPort',       16],
@@ -22,6 +23,7 @@ const TCPHeaderLengthMap = new Map([
   ['Options',              320],
 ]);
 
+// 封装TCOP首部类
 class TCPSegment {
   constructor(addr, port) {
     this.segment = [];
@@ -30,6 +32,7 @@ class TCPSegment {
     this.port = port;
   }
 
+  // 封包，依次调用下列函数
   encapsulateSegment(srcAddr, srcPort, dstAddr, dstPort, msg = undefined, random = 0, seq = 0, ack = 0, flags = {
     NS:  0,
     CWR: 0,
@@ -76,6 +79,7 @@ class TCPSegment {
     return this.segment;
   }
 
+  // 解包
   decapsulateSegment(segment, srcAddr, dstAddr) {
     if (typeof segment !== 'string') {
       throw new Error('TCP segment must be a string!');
@@ -118,6 +122,7 @@ class TCPSegment {
     return this.segment;
   }
 
+  // 二进制转十六进制
   getHex(binary) {
     let str = '';
 
@@ -135,6 +140,7 @@ class TCPSegment {
     return '0x' + str.split('').reverse().join('');
   }
 
+  // ASCII字符转二进制
   parseData(binary) {
     let data = '';
 
@@ -145,6 +151,7 @@ class TCPSegment {
     return data;
   }
 
+  // 设置源端口号
   setSourcePort(port) {
     let segmentSourcePort = {
       name: 'SourcePort',
@@ -162,6 +169,7 @@ class TCPSegment {
     return this;
   }
 
+  // 设置目标端口号
   setDestinationPort(port) {
     let segmentDestinationPort = {
       name: 'DestinationPort',
@@ -179,6 +187,7 @@ class TCPSegment {
     return this;
   }
 
+  // 设置序列号，生成随机数
   // for display purpose, seq is not a random number
   setSequenceNumber(random, seq = 0) {
     let hexRandom = '0x' + random.toString(16).padStart(8, '0').toUpperCase();
@@ -198,6 +207,7 @@ class TCPSegment {
     return this;
   }
 
+  // 设置确认应答号
   setAcknowledgementNumber(ack = 0) {
     let segmentAcknowledgementNumber = {
       name: 'AcknowledgementNumber',
@@ -215,6 +225,7 @@ class TCPSegment {
     return this;
   }
 
+  // 设置数据偏移
   // the unit of offset is 4 bytes, 32 bits
   setDataOffset(offset = 5) {
     let segmentDataOffset = {
@@ -233,6 +244,7 @@ class TCPSegment {
     return this;
   }
 
+  // 设置保留字节
   setReserved() {
     let segmentReserved = {
       name: 'Reserved',
@@ -262,6 +274,7 @@ class TCPSegment {
   //   SYN: 0,
   //   FIN: 0,
   // }
+  // 设置控制位
   setFlags(flags) {
     let segmentFlags = {
       name: 'Flags',
@@ -288,6 +301,7 @@ class TCPSegment {
     return this;
   }
 
+  // 设置窗口大小
   // 0 window size means getting the latest window size
   setWindowSize(windowSize = 0) {
     let segmentWindowSize = {
@@ -306,6 +320,7 @@ class TCPSegment {
     return this;
   }
 
+  // 设置校验和
   setChecksum() {
     let segmentChecksum = {
       name: 'Checksum',
@@ -323,6 +338,7 @@ class TCPSegment {
     return this;
   }
 
+  // 设置紧急指针
   // only valid when URG = 1
   setUrgentPointer(ptr = 0) {
     let segmentUrgentPointer = {
@@ -341,17 +357,20 @@ class TCPSegment {
     return this;
   }
 
+  // 设置选项
   // see https://en.wikipedia.org/wiki/Transmission_Control_Protocol#TCP_segment_structure
   setOptions() {
     console.log('Don\'t support TCP header options!');
     return this;
   }
 
+  // 设置选项填充字节
   // when options apply, pad 0 to make header a 32-bit multiple
   setPadding(hasOptions = false) {
     return this;
   }
 
+  // 设置数据（载荷）
   setData(data, msg = undefined) {
     let segmentData = {
       name: 'Data',
@@ -368,6 +387,7 @@ class TCPSegment {
     return this;
   }
 
+  // 计算校验和，引入IPv4伪首部
   // checksum for IPv4
   calculateChecksum(srcAddr, dstAddr) {
     const protocol = 6;
@@ -414,6 +434,7 @@ class TCPSegment {
     return this;
   }
 
+  // 检查校验和正确性
   checkChecksum(srcAddr, dstAddr) {
     const protocol = 6;
     let IPv4PseudoHeader = '';

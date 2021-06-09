@@ -1,7 +1,9 @@
 /**
  * @author Henry Wong
+ * 包装以太网帧头部
  */
 
+// Ethernet II 帧头部各部分的长度（位）
 // Ethernet II Header Structure
 // NOTICE PAYLOAD IS IN OCTET / BYTE FORM WHILE OTHERS ARE IN BITS
 const EthHeaderLengthMap = new Map([
@@ -21,6 +23,7 @@ const EthertypeDefinition = {
   IPv6: '86DD',
 };
 
+// 包装以太网帧的类
 class EthernetFrame {
   constructor(mac) {
     this.mac = mac;
@@ -28,6 +31,7 @@ class EthernetFrame {
     this.binHeader = '';
   }
 
+  // 封装帧头部总函数，依次调用下列函数
   encapsulateFrame(macSrc, macDst, payload, msg = undefined, Ethertype = '0800') {
     this.frame = [];
     this.binHeader = '';
@@ -45,7 +49,7 @@ class EthernetFrame {
     return this.frame;
   }
 
-  // TODO: add support for FCS and interpacket gap
+  // 解封
   // decapsulateFrame(frame) {
   //   if (typeof frame !== 'string') {
   //     throw new Error('Ethernet frame must be a string.');
@@ -71,6 +75,7 @@ class EthernetFrame {
   //   return decapsulatedFrame;
   // }
 
+  // 二进制转十六进制
   getHex(binary) {
     let str = '';
 
@@ -88,6 +93,7 @@ class EthernetFrame {
     return '0x' + str.split('').reverse().join('');
   }
 
+  // ASCII字符转二进制
   parseData(binary) {
     let data = '';
 
@@ -98,6 +104,7 @@ class EthernetFrame {
     return data;
   }
 
+  // 设置前导码
   setPreamble() {
     const preambleOctet = '10101010';
     let preamble = '';
@@ -120,6 +127,7 @@ class EthernetFrame {
     return this;
   }
 
+  // 设置SFD
   setStartFrameDelimiter() {
     let frameStartFrameDelimiter = {
       name: 'StartFrameDelimiter',
@@ -136,6 +144,7 @@ class EthernetFrame {
     return this;
   }
 
+  // 设置目标MAC地址
   setMACDestination(dstMac) {
     let frameMACDestination = {
       name: 'MACDestination',
@@ -156,6 +165,7 @@ class EthernetFrame {
     return this;
   }
 
+  // 设置源MAC地址
   setMACSource(srcMac) {
     let frameMACSource = {
       name: 'MACSource',
@@ -176,6 +186,7 @@ class EthernetFrame {
     return this;
   }
 
+  // 设置类型
   // More info at standards.ieee.org/regauth/ethertype/eth.txt
   setEthertype(ethertype = '0800') {
     let frameEthertype = {
@@ -194,6 +205,7 @@ class EthernetFrame {
     return this;
   }
 
+  // 设置数据（载荷）
   setData(data, msg = undefined) {
     let frameData = {
       name: 'Data',
@@ -215,6 +227,7 @@ class EthernetFrame {
     return this;
   }
 
+  // 设置填充字节
   setPadding() {
     if (this.frameData.length < 46 * 8) {
       let framePadding = {
@@ -234,7 +247,8 @@ class EthernetFrame {
     return this;
   }
 
-  // TODO: complete the function base on CRC-32-IEEE802.3
+  // 设置FCS，基于CRC32冗余校验码
+  // 采用PHP中的CRC32方案
   setFrameCheckSequence() {
     let frameCheckSequence = {
       name: 'FrameCheckSequence',
@@ -269,7 +283,6 @@ class EthernetFrame {
     return this;
   }
 
-  // TODO: 12 * 8 bits 0
   // setInterpacketGap() {
   //   console.warn('Ethernet interpacket gap is not implemented by now.');
   //   return this;

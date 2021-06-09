@@ -1,8 +1,9 @@
 /**
  * @author Henry Wong
- * see the end of the code for an example
+ * 包装UDP首部
  */
 
+// UDP首部各部分内容长度（位）
 const UDPHeaderLengthMap = new Map([
   ['SourcePort',      16],
   ['DestinationPort', 16],
@@ -10,6 +11,7 @@ const UDPHeaderLengthMap = new Map([
   ['Checksum',        16],
 ]);
 
+// 封装UDP头部类
 // This UDP Datagram runs on IPv4
 class UDPDatagram {
   constructor(addr, port) {
@@ -19,6 +21,7 @@ class UDPDatagram {
     this.binHeader = '';
   }
 
+  // 封包，依次调用下列函数
   encapsulateDatagram(srcAddr, srcPort, dstAddr, dstPort, msg = undefined) {
     // let datagram = '';
     let payload = '';
@@ -49,6 +52,7 @@ class UDPDatagram {
     return this.datagram;
   }
 
+  // 解包
   decapsulateDatagram(datagram, srcAddr, dstAddr) {
     if (typeof datagram !== 'string') {
       throw new Error('UDP datagram must be a string!');
@@ -87,6 +91,7 @@ class UDPDatagram {
     return this.datagram;
   }
 
+  // 二进制转十六进制
   getHex(binary) {
     let str = '';
 
@@ -104,6 +109,7 @@ class UDPDatagram {
     return '0x' + str.split('').reverse().join('');
   }
 
+  // ASCII字符转二进制
   parseData(binary) {
     let data = '';
 
@@ -114,6 +120,7 @@ class UDPDatagram {
     return data;
   }
 
+  // 设置源端口号
   setSourcePort(port) {
     let datagramSourcePort = {
       name: 'SourcePort',
@@ -131,6 +138,7 @@ class UDPDatagram {
     return this;
   }
 
+  // 设置目标端口号
   setDestinationPort(port) {
     let datagramDestinationPort = {
       name: 'DestinationPort',
@@ -148,6 +156,7 @@ class UDPDatagram {
     return this;
   }
 
+  // 设置包长度
   setLength(payloadLength) {
     let datagramLength = {
       name: 'Length',
@@ -166,6 +175,7 @@ class UDPDatagram {
     return this;
   }
 
+  // 设置校验和
   setChecksum() {
     let datagramChecksum = {
       name: 'Checksum',
@@ -183,6 +193,7 @@ class UDPDatagram {
     return this;
   }
 
+  // 设置数据（载荷）
   setData(data, msg = undefined) {
     let datagramData = {
       name: 'Data',
@@ -199,6 +210,7 @@ class UDPDatagram {
     return this;
   }
 
+  // 计算校验和，需要添加IPv4伪首部
   // not all UDP datagram use checksum, in this case, checksum equals 0
   // checksum for IPv4
   calculateChecksum(srcAddr, dstAddr) {
@@ -245,6 +257,7 @@ class UDPDatagram {
     return this;
   }
 
+  // 检测校验和正确性
   checkChecksum(srcAddr, dstAddr) {
     const protocol = 17;
     let IPv4PseudoHeader = '';

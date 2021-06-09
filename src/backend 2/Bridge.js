@@ -1,6 +1,7 @@
 // Bridge.js
-// see the end of the code for an example
+// 进行表单数据的检查
 
+// 检查表单数据的类
 class FormInfo {
   constructor(mac, ip, port) {
     this.mac = mac;
@@ -8,12 +9,14 @@ class FormInfo {
     this.port = port;
   }
 
+  // 清空数据
   clear() {
     this.mac = '';
     this.ip = '';
     this.port = '';
   }
 
+  // 总体检查函数，依次调用下列函数
   check() {
     this.errMsg = [];
 
@@ -24,6 +27,7 @@ class FormInfo {
     return this.errMsg;
   }
 
+  // 检查mac地址的有效性，必须是“12-34-56-78-90-ab”
   checkMAC(MAC) {
     let arr = [];
 
@@ -59,7 +63,7 @@ class FormInfo {
     return this;
   }
 
-
+  // 检查IP地址的有效性，必须是点分十进制的形式
   checkIP(IP) {
     let arr = [];
 
@@ -88,6 +92,7 @@ class FormInfo {
     return this;
   }
 
+  // 检查端口号有效性
   checkPort(Port) {
     if (typeof Port !== 'number' || Number.isNaN(Port)) {
       this.errMsg.push('Port should be a number!');
